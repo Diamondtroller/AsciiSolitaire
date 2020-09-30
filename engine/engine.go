@@ -1,8 +1,6 @@
 package engine
 
 import (
-	"fmt"
-
 	"github.com/bennicholls/burl-E/reximage"
 )
 
@@ -12,7 +10,17 @@ type (
 		X, Y   int
 		Sprite reximage.ImageData
 	}
+	//Game conatins all stuff for main game run
 )
+
+// Init Initializes game
+/*func Init() (Screen tcell.Screen) {
+	var err error
+	Screen, err = tcell.NewScreen()
+	aPanic(err)
+	//tcell.RegisterEncoding("IBM Code Page 437", char.CodePage437)
+	return
+}*/
 
 //InitSprite initializes sprites
 func (thisObj *GameObject) InitSprite(name string) {
@@ -20,10 +28,13 @@ func (thisObj *GameObject) InitSprite(name string) {
 	var tmp reximage.ImageData
 	var err error
 	tmp, err = reximage.Import(spritePath + name + ".xp")
-	if err == nil {
-		thisObj.Sprite = tmp
-	} else {
-		fmt.Println(err)
-	}
+	aPanic(err)
+	thisObj.Sprite = tmp
 	return
+}
+
+func aPanic(e error) {
+	if e != nil {
+		panic(e)
+	}
 }

@@ -6,22 +6,29 @@ import (
 
 	"../engine"
 	"github.com/gdamore/tcell"
+	//char "golang.org/x/text/encoding/charmap"
+	//textencoding "golang.org/x/text/encoding"
 )
 
 func main() {
 	os.Chdir(programPath())
-	var Screen tcell.Screen
 	var err error
+	var Screen tcell.Screen
+	//var Game engine.Game
 	var Chuck engine.GameObject
 	Chuck.X = 10
 	Chuck.Y = 10
 	Chuck.InitSprite("Chuck")
 	t := time.Now()
-	//trigger := tcell.NewEventKey(tcell.KeyEscape, ' ', tcell.ModNone)
+	//tcell.RegisterEncoding("CodePage437", char.CodePage437)
 	if Screen, err = tcell.NewScreen(); err == nil {
 		Screen.Init()
 		defer Screen.Fini()
 	}
+	aPanic(err)
+	//trigger := tcell.NewEventKey(tcell.KeyEscape, ' ', tcell.ModNone)
+	//Screen, err = tcell.NewScreen()
+
 	for {
 		//Screen.Fill(' ', tcell.StyleDefault)
 		//ev := Screen.PollEvent()
@@ -40,4 +47,10 @@ func programPath() string {
 		panic(errPath)
 	}
 	return path
+}
+
+func aPanic(e error) {
+	if e != nil {
+		panic(e)
+	}
 }

@@ -16,6 +16,11 @@ func (g *Game) Init() {
 	//tcell.RegisterEncoding("IBM Code Page 437", char.CodePage437)
 	(*g).Screen.Init()
 	//return
+	(*g).KeyBindings = make(map[tcell.Key]func())
+	(*g).MouseBindings = make(map[tcell.ButtonMask]func(*tcell.EventMouse))
+	(*g).Objects = make([]GameObject, 0)
+	(*g).Run = true
+
 }
 
 //InitSprite initializes sprites
@@ -30,4 +35,9 @@ func (thisObj *GameObject) InitSprite(name string) {
 	aPanic(err)
 	thisObj.Sprite = tmp
 	return
+}
+
+//Fini Finalizes game
+func (g *Game) Fini() {
+	(*g).Screen.Fini()
 }

@@ -35,26 +35,41 @@ func (g *Game) DrawText(x, y int, text string, s tcell.Style) {
 	}
 }
 
-//RenderScreenLoop Renders entire screen with sprites  in loop
-func (g *Game) RenderScreenLoop() {
-	clear := 20
-	var i int
+//DrawRect Adds rectangle to tcell screen buffer
+func (g *Game) DrawRect(x, y, w, h int, r rune, s tcell.Style) {
+	for i := 0; i < w*h; i++ {
+		(*g).Screen.SetContent(x+(i%w), y+(i/w), r, nil, s)
+	}
+}
+
+//ObjectLoop Draws all added objects to the screen
+func (g *Game) ObjectLoop() {
+	for _, Obj := range (*g).Objects {
+		(*g).DrawSprite(&Obj)
+	}
+}
+
+//ScreenLoop  Renders entire screen with sprites in loop
+func (g *Game) ScreenLoop() {
+	// var action func()
 	timeChan := make(chan time.Time, 5)
 	go (*g).renderSpeed(timeChan)
 	timeChan <- time.Now()
 	for (*g).Run {
-		if i == 0 {
-			(*g).Screen.Clear()
-		}
-		//(*g).Screen.Clear()
-		i = (i + 1) % clear
-		for _, Obj := range (*g).Objects {
-			(*g).DrawSprite(&Obj)
-		}
+		(*g).ObjectLoop()
+		<-(*g).funcChan
+		// ActionLoop:
+		// 	for {
+		// 		select {
+		// 		case action = <-(*g).funcChan:
+		// 			action()
+		// 		default:
+		// 			break ActionLoop
+		// 		}
+		// 	}
 		(*g).Screen.Show()
 		if (*g).Debug {
 			timeChan <- time.Now()
 		}
-		time.Sleep((*g).AnimationSpeed)
 	}
 }

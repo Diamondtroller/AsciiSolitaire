@@ -20,6 +20,7 @@ type (
 		AnimationSpeed time.Duration
 		Objects        []GameObject
 		Screen         tcell.Screen
+		funcChan       chan func()
 		KeyBindings    map[tcell.Key]func()
 		MouseBindings  map[tcell.ButtonMask]func(*tcell.EventMouse)
 	}
@@ -30,25 +31,27 @@ func (g *Game) EventLoop() {
 	var ev tcell.Event
 	var action func()
 	(*g).KeyBindings[tcell.KeyESC] = func() { (*g).Run = false }
-	(*g).KeyBindings[tcell.KeyF3] = func() { (*g).Debug = !(*g).Debug; (*g).renderSpeedClear() }
+	(*g).KeyBindings[tcell.KeyCtrlD] = func() { (*g).Debug = !(*g).Debug; (*g).funcChan <- (*g).DebugClear }
+	(*g).KeyBindings[tcell.KeyCtrlL] = func() { (*g).funcChan <- (*g).Screen.Sync }
+	(*g).KeyBindings[tcell.KeyCtrlE] = func() { (*g).funcChan <- (*g).Screen.Clear }
 	for {
 		ev = (*g).Screen.PollEvent()
 		switch event := ev.(type) {
+		/*switch event.Key() {
+
+			case tcell.KeyEscape, tcell.KeyEnter:
+				(*g).Run = false
+				return
+			case tcell.KeyCtrlL:
+				(*g).Screen.Sync()
+		}*/
+		case *tcell.EventResize:
+			(*g).funcChan <- (*g).Screen.Sync
 		case *tcell.EventKey:
 			action = (*g).KeyBindings[event.Key()]
 			if action != nil {
 				action()
 			}
-			/*switch event.Key() {
-
-				case tcell.KeyEscape, tcell.KeyEnter:
-					(*g).Run = false
-					return
-				case tcell.KeyCtrlL:
-					(*g).Screen.Sync()
-			}*/
-		case *tcell.EventResize:
-			(*g).Screen.Sync()
 		}
 	}
 }

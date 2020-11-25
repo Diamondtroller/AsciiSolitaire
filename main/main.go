@@ -4,7 +4,7 @@ import (
 	"os"
 	"time"
 
-	"../engine"
+	"github.com/Diamondtroller/Asciicker/engine"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 	Chuck.InitSprite("Chuck")
 	game.Objects = append(game.Objects, Chuck)
 	go game.EventLoop()
-	go game.RenderScreenLoop()
+	go game.ScreenLoop()
 	for game.Run {
 		time.Sleep(100 * time.Millisecond)
 		//game.Screen.Clear()
@@ -49,3 +49,4 @@ func go2Root() {
 		err = os.Chdir(path)*/
 	aPanic(err)
 }
+

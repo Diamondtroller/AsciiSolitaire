@@ -27,15 +27,20 @@ func (g *Game) renderSpeed(rTime chan time.Time) {
 		for _, tmp = range tSlice {
 			average += tmp / float64(samples)
 		}
-		(*g).DrawText(1, 1, fmt.Sprintf("FPS: %.3f", 1.0/average), st)
-		(*g).DrawText(1, 2, fmt.Sprintf("LOOP TIME: %.6fs", average), st)
-		(*g).DrawText(12, 3, fmt.Sprintf("%.6fms", (1000.0*average)), st)
+		(*g).funcChan <- func() {
+			(*g).DrawText(
+				1,
+				1,
+				fmt.Sprintf("FPS: %.3f  |  LOOP TIME: %.6f s  |  %.6f ms", 1.0/average, average, (1000.0*average)),
+				st,
+			)
+		}
+		//close((*g).funcChan)
 		average = 0
 	}
 }
 
-func (g *Game) renderSpeedClear() {
-	(*g).DrawText(1, 1, "         ", tcell.StyleDefault)
-	(*g).DrawText(1, 2, "         ", tcell.StyleDefault)
-	(*g).DrawText(12, 3, "     ", tcell.StyleDefault)
+//DebugClear Clears debugging Data
+func (g *Game) DebugClear() {
+	(*g).DrawRect(1, 1, 40, 1, ' ', tcell.StyleDefault)
 }

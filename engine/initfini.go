@@ -19,6 +19,7 @@ func (g *Game) Init() {
 	(*g).KeyBindings = make(map[tcell.Key]func())
 	(*g).MouseBindings = make(map[tcell.ButtonMask]func(*tcell.EventMouse))
 	(*g).Objects = make([]GameObject, 0)
+	(*g).funcChan = make(chan func(), 8)
 	(*g).Run = true
 
 }

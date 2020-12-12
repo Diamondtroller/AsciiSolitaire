@@ -3,15 +3,22 @@ package engine
 import (
 	"time"
 
-	"github.com/bennicholls/burl-E/reximage"
+	//"github.com/bennicholls/burl-E/reximage"
 	"github.com/gdamore/tcell"
 )
 
 type (
+	//Cell Tcell compatible cell struct
+	Cell struct {
+		glyph rune
+		form  tcell.Style
+	}
+	//CellSprite 2 dimensional array of cells to store rexpaint sprites
+	CellSprite [][]Cell
 	//GameObject is struct for all game objects one screen
 	GameObject struct {
-		X, Y   int
-		Sprite reximage.ImageData
+		X, Y     int
+		CellData CellSprite
 	}
 	//Game conatins all stuff for main game run
 	Game struct {
@@ -20,7 +27,9 @@ type (
 		AnimationSpeed time.Duration
 		Objects        []GameObject
 		Screen         tcell.Screen
-		funcChan       chan func()
+		BGglyph        rune
+		BGstyle        tcell.Style
+		Player         *GameObject
 		KeyBindings    map[tcell.Key]func()
 		MouseBindings  map[tcell.ButtonMask]func(*tcell.EventMouse)
 	}
@@ -30,10 +39,9 @@ type (
 func (g *Game) EventLoop() {
 	var ev tcell.Event
 	var action func()
-	(*g).KeyBindings[tcell.KeyESC] = func() { (*g).Run = false }
-	(*g).KeyBindings[tcell.KeyCtrlD] = func() { (*g).Debug = !(*g).Debug; (*g).funcChan <- (*g).DebugClear }
-	(*g).KeyBindings[tcell.KeyCtrlL] = func() { (*g).funcChan <- (*g).Screen.Sync }
-	(*g).KeyBindings[tcell.KeyCtrlE] = func() { (*g).funcChan <- (*g).Screen.Clear }
+	// (*g).KeyBindings[tcell.KeyCtrlD] = func() { (*g).Debug = !(*g).Debug; (*g).funcChan <- (*g).DebugClear }
+	// (*g).KeyBindings[tcell.KeyCtrlL] = func() { (*g).funcChan <- (*g).Screen.Sync }
+	// (*g).KeyBindings[tcell.KeyCtrlE] = func() { (*g).funcChan <- (*g).Screen.Clear }
 	for {
 		ev = (*g).Screen.PollEvent()
 		switch event := ev.(type) {
@@ -46,10 +54,10 @@ func (g *Game) EventLoop() {
 				(*g).Screen.Sync()
 		}*/
 		case *tcell.EventResize:
-			(*g).funcChan <- (*g).Screen.Sync
+			//(*g).funcChan <- (*g).Screen.Sync
+			(*g).Screen.Sync()
 		case *tcell.EventKey:
-			action = (*g).KeyBindings[event.Key()]
-			if action != nil {
+			if action = (*g).KeyBindings[event.Key()]; action != nil {
 				action()
 			}
 		}

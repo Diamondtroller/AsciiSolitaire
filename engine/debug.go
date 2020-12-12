@@ -27,14 +27,12 @@ func (g *Game) renderSpeed(rTime chan time.Time) {
 		for _, tmp = range tSlice {
 			average += tmp / float64(samples)
 		}
-		(*g).funcChan <- func() {
-			(*g).DrawText(
-				1,
-				1,
-				fmt.Sprintf("FPS: %.3f  |  LOOP TIME: %.6f s  |  %.6f ms", 1.0/average, average, (1000.0*average)),
-				st,
-			)
-		}
+		(*g).DrawText(
+			1,
+			1,
+			fmt.Sprintf("FPS: %.3f  |  LOOP TIME: %.6f s  |  %.6f ms", 1.0/average, average, (1000.0*average)),
+			st,
+		)
 		//close((*g).funcChan)
 		average = 0
 	}

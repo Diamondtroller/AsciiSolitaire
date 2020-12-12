@@ -4,26 +4,20 @@ import (
 	"time"
 
 	"github.com/gdamore/tcell"
-	char "golang.org/x/text/encoding/charmap"
+	//char "golang.org/x/text/encoding/charmap"
 )
 
 //DrawSprite Adds sprites to tcell screen
 func (g *Game) DrawSprite(tObj *GameObject) {
-	var cRune rune
-	var runeX, runeY int
-	var runeColourF, runeColourB tcell.Color
-	var runeStyle tcell.Style
-	for i, cell := range tObj.Sprite.Cells {
+
+	for i, cellrow := range (*tObj).CellData {
+		for j, cell := range cellrow {
+			(*g).Screen.SetContent(tObj.X+j, tObj.Y+i, cell.glyph, nil, cell.form)
+		}
 		//fmt.Println(i)
-		runeX = tObj.X + i%tObj.Sprite.Width
-		runeY = tObj.Y + (i / tObj.Sprite.Width)
-		runeColourB = tcell.NewRGBColor((int32)(cell.R_b), (int32)(cell.G_b), (int32)(cell.B_b))
-		runeStyle = runeStyle.Background(runeColourB)
-		runeColourF = tcell.NewRGBColor((int32)(cell.R_f), (int32)(cell.G_f), (int32)(cell.B_f))
-		runeStyle = runeStyle.Foreground(runeColourF)
 		//b, _ := char.CodePage437.EncodeRune(rune(cell.Glyph))
-		cRune = char.CodePage437.DecodeByte(byte(cell.Glyph))
-		(*g).Screen.SetContent(runeX, runeY, cRune, nil, runeStyle)
+
+		//(*g).Screen.SetContent(runeX, runeY, cRune, nil, runeStyle)
 		//Screen.SetContent(runeX, runeY, rune(cell.Glyph), nil, runeStyle)
 	}
 }
@@ -49,27 +43,37 @@ func (g *Game) ObjectLoop() {
 	}
 }
 
-//ScreenLoop  Renders entire screen with sprites in loop
-func (g *Game) ScreenLoop() {
-	// var action func()
-	timeChan := make(chan time.Time, 5)
-	go (*g).renderSpeed(timeChan)
-	timeChan <- time.Now()
+//RenderScreenLoop  Renders entire screen with sprites in loop
+func (g *Game) RenderScreenLoop() {
 	for (*g).Run {
+		(*g).Screen.Fill(g.BGglyph, g.BGstyle)
 		(*g).ObjectLoop()
-		<-(*g).funcChan
-		// ActionLoop:
-		// 	for {
-		// 		select {
-		// 		case action = <-(*g).funcChan:
-		// 			action()
-		// 		default:
-		// 			break ActionLoop
-		// 		}
-		// 	}
 		(*g).Screen.Show()
-		if (*g).Debug {
-			timeChan <- time.Now()
-		}
+		time.Sleep((*g).AnimationSpeed)
 	}
 }
+
+// //ScreenLoop  Renders entire screen with sprites in loop
+// func (g *Game) ScreenLoop() {
+// 	// var action func()
+// 	timeChan := make(chan time.Time, 5)
+// 	go (*g).renderSpeed(timeChan)
+// 	timeChan <- time.Now()
+// 	for (*g).Run {
+// 		(*g).ObjectLoop()
+// 		<-(*g).funcChan
+// 		// ActionLoop:
+// 		// 	for {
+// 		// 		select {
+// 		// 		case action = <-(*g).funcChan:
+// 		// 			action()
+// 		// 		default:
+// 		// 			break ActionLoop
+// 		// 		}
+// 		// 	}
+// 		(*g).Screen.Show()
+// 		if (*g).Debug {
+// 			timeChan <- time.Now()
+// 		}
+// 	}
+// }

@@ -4,10 +4,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/gdamore/tcell"
-
-	as "github.com/Diamondtroller/AsciiSolitaire/asciisolitaire"
-	"github.com/Diamondtroller/AsciiSolitaire/engine"
+	tr "github.com/Diamondtroller/AsciiSolitaire/trexsolitaire"
 )
 
 // var (
@@ -17,22 +14,17 @@ import (
 func main() {
 	go2Root()
 
-	game := as.Init()
+	game := tr.InitGame()
 
 	defer game.Fini()
 
-	game.AnimationSpeed = 70 * time.Millisecond
-	game.BGglyph = '░'
-	game.BGstyle = game.BGstyle.Background(tcell.ColorGreen)
-	game.BGstyle = game.BGstyle.Foreground(tcell.NewHexColor(0x16950d))
+	//var Chuck engine.GameObject
 
-	var Chuck engine.GameObject
+	//Chuck.CellData = engine.InitSprite("Chuck")
 
-	Chuck.InitSprite("Chuck")
+	//game.Objects = append(game.Objects, Chuck)
 
-	game.Objects = append(game.Objects, Chuck)
-
-	game.Player = &game.Objects[0]
+	//game.Player = &game.Objects[0]
 	go game.EventLoop()
 	go game.RenderScreenLoop()
 	for game.Run {

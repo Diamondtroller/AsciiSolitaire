@@ -19,6 +19,7 @@ type (
 	GameObject struct {
 		X, Y     int
 		CellData CellSprite
+		Hidden   bool
 	}
 	//Game conatins all stuff for main game run
 	Game struct {

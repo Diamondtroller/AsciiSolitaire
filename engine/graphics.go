@@ -48,8 +48,8 @@ func (g *Game) RenderScreenLoop() {
 	for (*g).Run {
 		(*g).Screen.Fill(g.BGglyph, g.BGstyle)
 		(*g).ObjectLoop()
-		(*g).Screen.Show()
 		time.Sleep((*g).AnimationSpeed)
+		(*g).Screen.Show()
 	}
 }
 

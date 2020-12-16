@@ -9,6 +9,8 @@ import (
 	"golang.org/x/text/encoding/charmap"
 )
 
+var spriteCache = make(map[string]CellSprite)
+
 // Init Initializes game
 func (g *Game) Init() {
 	var err error
@@ -39,7 +41,10 @@ func (g *Game) KeyBindingAssignment() {
 }
 
 //InitSprite initializes sprites
-func (thisObj *GameObject) InitSprite(name string) {
+func InitSprite(name string) (CellData CellSprite) {
+	if cachedData, exists := spriteCache[name]; exists {
+		return cachedData
+	}
 	spriteFolder := "Sprites"
 	var rex reximage.ImageData
 	var err error
@@ -51,9 +56,9 @@ func (thisObj *GameObject) InitSprite(name string) {
 	var i, j int
 	var runeColourF, runeColourB tcell.Color
 	var runeStyle tcell.Style
-	(*thisObj).CellData = make(CellSprite, rex.Height)
-	for i := range (*thisObj).CellData {
-		(*thisObj).CellData[i] = make([]Cell, rex.Width)
+	CellData = make(CellSprite, rex.Height)
+	for i := range CellData {
+		CellData[i] = make([]Cell, rex.Width)
 	}
 	for n, cell := range rex.Cells {
 		i = n % rex.Width
@@ -62,12 +67,14 @@ func (thisObj *GameObject) InitSprite(name string) {
 		runeStyle = runeStyle.Background(runeColourB)
 		runeColourF = tcell.NewRGBColor((int32)(cell.R_f), (int32)(cell.G_f), (int32)(cell.B_f))
 		runeStyle = runeStyle.Foreground(runeColourF)
-		(*thisObj).CellData[j][i].glyph = charmap.CodePage437.DecodeByte(byte(cell.Glyph))
-		(*thisObj).CellData[j][i].form = runeStyle
+		CellData[j][i].glyph = charmap.CodePage437.DecodeByte(byte(cell.Glyph))
+		CellData[j][i].form = runeStyle
 	}
+	return
 }
 
 //Fini Finalizes game
 func (g *Game) Fini() {
+	(*g).Screen.Clear()
 	(*g).Screen.Fini()
 }

@@ -12,24 +12,14 @@ import (
 // )
 
 func main() {
-	go2Root()
-
 	game := tr.InitGame()
 
 	defer game.Fini()
 
-	//var Chuck engine.GameObject
-
-	//Chuck.CellData = engine.InitSprite("Chuck")
-
-	//game.Objects = append(game.Objects, Chuck)
-
-	//game.Player = &game.Objects[0]
 	go game.EventLoop()
 	go game.RenderScreenLoop()
 	for game.Run {
-		time.Sleep(100 * time.Millisecond)
-		//game.Screen.Clear()
+		time.Sleep(200 * time.Millisecond)
 	}
 }
 

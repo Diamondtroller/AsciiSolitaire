@@ -16,13 +16,12 @@ func (g *Game) Init() {
 	var err error
 	(*g).Screen, err = tcell.NewScreen()
 	aPanic(err)
-	//tcell.RegisterEncoding("IBM Code Page 437", char.CodePage437)
-	(*g).Screen.Init()
+
+	aPanic((*g).Screen.Init())
 	(*g).KeyBindings = make(map[tcell.Key]func())
 	(*g).KeyBindingAssignment()
-	(*g).MouseBindings = make(map[tcell.ButtonMask]func(*tcell.EventMouse))
+	//(*g).MouseBindings = make(map[tcell.ButtonMask]func(*tcell.EventMouse))
 	(*g).Objects = make([]GameObject, 0)
-	//(*g).funcChan = make(chan func(), 8)
 	(*g).Run = true
 
 }
@@ -30,14 +29,6 @@ func (g *Game) Init() {
 //KeyBindingAssignment Reads file and assigns key to the functions
 func (g *Game) KeyBindingAssignment() {
 	(*g).KeyBindings[tcell.KeyESC] = func() { (*g).Run = false }
-	(*g).KeyBindings[tcell.KeyUpLeft] = func() { (*g).Player.X--; (*g).Player.Y-- }
-	(*g).KeyBindings[tcell.KeyUpRight] = func() { (*g).Player.X++; (*g).Player.Y-- }
-	(*g).KeyBindings[tcell.KeyDownLeft] = func() { (*g).Player.X--; (*g).Player.Y++ }
-	(*g).KeyBindings[tcell.KeyDownRight] = func() { (*g).Player.X++; (*g).Player.Y++ }
-	(*g).KeyBindings[tcell.KeyRight] = func() { (*g).Player.X++ }
-	(*g).KeyBindings[tcell.KeyLeft] = func() { (*g).Player.X-- }
-	(*g).KeyBindings[tcell.KeyUp] = func() { (*g).Player.Y-- }
-	(*g).KeyBindings[tcell.KeyDown] = func() { (*g).Player.Y++ }
 }
 
 //InitSprite initializes sprites
@@ -50,7 +41,7 @@ func InitSprite(name string) (CellData CellSprite) {
 	var err error
 	rex, err = reximage.Import(spriteFolder + string(os.PathSeparator) + name + ".xp")
 	if err == nil {
-		fmt.Println("No error importingwhile importing", name)
+		fmt.Println("No error while importing", name)
 	}
 	aPanic(err)
 	var i, j int
@@ -75,6 +66,7 @@ func InitSprite(name string) (CellData CellSprite) {
 
 //Fini Finalizes game
 func (g *Game) Fini() {
+	(*g).Screen.Fill(' ', tcell.StyleDefault)
 	(*g).Screen.Clear()
 	(*g).Screen.Fini()
 }

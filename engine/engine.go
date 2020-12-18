@@ -30,9 +30,8 @@ type (
 		Screen         tcell.Screen
 		BGglyph        rune
 		BGstyle        tcell.Style
-		Player         *GameObject
 		KeyBindings    map[tcell.Key]func()
-		MouseBindings  map[tcell.ButtonMask]func(*tcell.EventMouse)
+		//MouseBindings  map[tcell.ButtonMask]func(*tcell.EventMouse)
 	}
 )
 

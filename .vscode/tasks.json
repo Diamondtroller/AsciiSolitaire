@@ -3,15 +3,15 @@
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
-        {
-            "label": "Start_dlv",
-            "type": "shell",
-            "command": "cd ${workspaceFolder}\\main & dlv debug --headless --listen=:2345 --log --api-version=2 & timeout /NOBREAK /t 3 >nul",
-            "problemMatcher": [],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        }
+        // {
+        //     "label": "Start_dlv",
+        //     "type": "shell",
+        //     "command": "cd ${workspaceFolder}\\main & dlv debug --headless --listen=:2345 --log --api-version=2 & timeout /NOBREAK /t 3 >nul",
+        //     "problemMatcher": [],
+        //     "group": {
+        //         "kind": "build",
+        //         "isDefault": true
+        //     }
+        // }
     ]
 }

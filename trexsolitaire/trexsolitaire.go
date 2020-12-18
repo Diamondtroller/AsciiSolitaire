@@ -9,10 +9,16 @@ import (
 )
 
 const (
-	diamond = 0
-	club    = 1
-	heart   = 2
-	spade   = 3
+	//diamond = 0
+	//club    = 1
+	//heart   = 2
+	//spade   = 3
+	showall      = -1
+	showtop      = 0
+	boardoffsetX = 0
+	boardoffsetY = 2
+	cardW        = 13
+	cardH        = 18
 )
 
 var suit = [4]rune{'♦', '♣', '♥', '♠'}
@@ -36,7 +42,7 @@ type (
 		CardPile    Stack
 		OpenCards   Stack
 		tablestacks [7]Stack
-		topstacks   [4]Stack
+		suitstacks  [4]Stack
 	}
 )
 
@@ -67,10 +73,19 @@ func CreateStack(g *engine.Game, X, Y, numOfCards int) (s Stack) {
 //CreateBoard Initializes solitaire board to place cards on
 func CreateBoard(g *engine.Game) (b *Board) {
 	b = new(Board)
-	b.CardPile = CreateStack(g, 1, 1, 0)
-	b.OpenCards = CreateStack(g, 1, 1+18+1, 3)
+	b.CardPile = CreateStack(g, 1, boardoffsetY, showtop)
+	b.OpenCards = CreateStack(g, 1, boardoffsetY+cardH+1, 3)
+	for i := 0; i < len(b.tablestacks); i++ {
+		b.tablestacks[i] = CreateStack(g, 1+(cardW+1)*(i+1), boardoffsetY+1, showall)
+		for j := 0; j <= i; j++ {
+			b.tablestacks[i].List.Add
+		}
+	}
+	for i := 0; i < len(b.suitstacks); i++ {
+		b.suitstacks[i] = CreateStack(g, 1+(cardW+1)*8, boardoffsetY+(cardH+1)*i, showtop)
+	}
+
 	return
 }
 
-//InitCards generates all cards
-func (b *Board) InitCards() {}
+func SliceToLList([])

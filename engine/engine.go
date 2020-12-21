@@ -3,7 +3,6 @@ package engine
 import (
 	"time"
 
-	//"github.com/bennicholls/burl-E/reximage"
 	"github.com/gdamore/tcell"
 )
 
@@ -20,6 +19,7 @@ type (
 		X, Y     int
 		CellData CellSprite
 		Hidden   bool
+		DrawFunc func(g *Game)
 	}
 	//Game conatins all stuff for main game run
 	Game struct {
@@ -54,7 +54,6 @@ func (g *Game) EventLoop() {
 				(*g).Screen.Sync()
 		}*/
 		case *tcell.EventResize:
-			//(*g).funcChan <- (*g).Screen.Sync
 			(*g).Screen.Sync()
 		case *tcell.EventKey:
 			if action = (*g).KeyBindings[event.Key()]; action != nil {
@@ -63,10 +62,6 @@ func (g *Game) EventLoop() {
 		}
 	}
 }
-
-// func (Objs *[]GameObject) Append (someObj GameObject) {
-
-// }
 
 func aPanic(e error) {
 	if e != nil {

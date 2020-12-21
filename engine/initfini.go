@@ -16,8 +16,8 @@ func (g *Game) Init() {
 	var err error
 	(*g).Screen, err = tcell.NewScreen()
 	aPanic(err)
-
-	aPanic((*g).Screen.Init())
+	err = (*g).Screen.Init()
+	aPanic(err)
 	(*g).KeyBindings = make(map[tcell.Key]func())
 	(*g).KeyBindingAssignment()
 	//(*g).MouseBindings = make(map[tcell.ButtonMask]func(*tcell.EventMouse))

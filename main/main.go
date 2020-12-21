@@ -7,24 +7,21 @@ import (
 	tr "github.com/Diamondtroller/AsciiSolitaire/trexsolitaire"
 )
 
-// var (
-// 	game engine.Game
-// )
-
 func main() {
+	//Initializes game object
 	game := tr.InitGame()
-
+	//Defers game closing to the end
 	defer game.Fini()
 
 	go game.EventLoop()
 	go game.RenderScreenLoop()
 	for game.Run {
-		time.Sleep(200 * time.Millisecond)
+		time.Sleep(100 * time.Millisecond)
 	}
 }
 
 func aPanic(e error) {
-	if e != nil {
+	if e != nil { //Checks if error is nil if it is panics
 		panic(e)
 	}
 }

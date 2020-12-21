@@ -4,21 +4,14 @@ import (
 	"time"
 
 	"github.com/gdamore/tcell"
-	//char "golang.org/x/text/encoding/charmap"
 )
 
 //DrawSprite Adds sprites to tcell screen
-func (g *Game) DrawSprite(tObj *GameObject) {
-
-	for i, cellrow := range (*tObj).CellData {
+func (g *Game) DrawSprite(x, y int, CellData CellSprite) {
+	for i, cellrow := range CellData {
 		for j, cell := range cellrow {
-			(*g).Screen.SetContent(tObj.X+j, tObj.Y+i, cell.glyph, nil, cell.form)
+			(*g).Screen.SetContent(x+j, y+i, cell.glyph, nil, cell.form)
 		}
-		//fmt.Println(i)
-		//b, _ := char.CodePage437.EncodeRune(rune(cell.Glyph))
-
-		//(*g).Screen.SetContent(runeX, runeY, cRune, nil, runeStyle)
-		//Screen.SetContent(runeX, runeY, rune(cell.Glyph), nil, runeStyle)
 	}
 }
 
@@ -39,7 +32,8 @@ func (g *Game) DrawRect(x, y, w, h int, r rune, s tcell.Style) {
 //ObjectLoop Draws all added objects to the screen
 func (g *Game) ObjectLoop() {
 	for _, Obj := range (*g).Objects {
-		(*g).DrawSprite(&Obj)
+		//(*g).DrawSprite(&Obj)
+		Obj.DrawFunc(g)
 	}
 }
 
@@ -48,8 +42,8 @@ func (g *Game) RenderScreenLoop() {
 	for (*g).Run {
 		(*g).Screen.Fill(g.BGglyph, g.BGstyle)
 		(*g).ObjectLoop()
-		time.Sleep((*g).AnimationSpeed)
 		(*g).Screen.Show()
+		time.Sleep((*g).AnimationSpeed)
 	}
 }
 

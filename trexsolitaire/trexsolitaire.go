@@ -20,6 +20,7 @@ const (
 	boardoffsetY = 2
 	cardW        = 13
 	cardH        = 18
+	diffY        = 3
 )
 
 var (
@@ -124,10 +125,10 @@ func (s *Stack) DrawStack(g *engine.Game) {
 		g.DrawSprite(s.Gameobj.X, s.Gameobj.Y, s.Gameobj.CellData)
 	} else if s.CardShow == showall {
 		for i := 0; i < s.List.Len()-1; i++ {
-			curCard.Value.(Card).draw(s.Gameobj.X, s.Gameobj.Y+i*2, false, g)
+			curCard.Value.(Card).draw(s.Gameobj.X, s.Gameobj.Y+i*diffY, false, g)
 			curCard = curCard.Next()
 		}
-		s.List.Back().Value.(Card).draw(s.Gameobj.X, s.Gameobj.Y+s.List.Len()*2, true, g)
+		s.List.Back().Value.(Card).draw(s.Gameobj.X, s.Gameobj.Y+(s.List.Len()-1)*diffY, true, g)
 	}
 }
 

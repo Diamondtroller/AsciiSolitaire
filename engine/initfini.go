@@ -32,10 +32,11 @@ func (g *Game) KeyBindingAssignment() {
 }
 
 //InitSprite initializes sprites
-func InitSprite(name string) (CellData CellSprite) {
+func InitSprite(name string) CellSprite {
 	if cachedData, exists := spriteCache[name]; exists {
 		return cachedData
 	}
+	var CellData CellSprite
 	spriteFolder := "Sprites"
 	var rex reximage.ImageData
 	var err error
@@ -61,7 +62,7 @@ func InitSprite(name string) (CellData CellSprite) {
 		CellData[j][i].glyph = charmap.CodePage437.DecodeByte(byte(cell.Glyph))
 		CellData[j][i].form = runeStyle
 	}
-	return
+	return CellData
 }
 
 //Fini Finalizes game

@@ -18,8 +18,8 @@ const (
 	showtop      = 0
 	boardoffsetX = 0
 	boardoffsetY = 2
-	cardW        = 13
-	cardH        = 18
+	cardW        = 15
+	cardH        = 22
 	diffY        = 3
 )
 
@@ -129,6 +129,8 @@ func (s *Stack) DrawStack(g *engine.Game) {
 			curCard = curCard.Next()
 		}
 		s.List.Back().Value.(Card).draw(s.Gameobj.X, s.Gameobj.Y+(s.List.Len()-1)*diffY, true, g)
+	} else if s.CardShow == showtop {
+		s.List.Back().Value.(Card).draw(s.Gameobj.X, s.Gameobj.Y, true, g)
 	}
 }
 
